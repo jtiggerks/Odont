@@ -64,7 +64,7 @@
 
     <div id="content" class="snap-content bg-guiamedico">
 
-            <div id="alert" style="width: 100%; text-align: center; bottom: 0;">                
+            <div id="alert" style="width: 100%; text-align: center; bottom: 0; display: none;">                
                 <div style="width: 20%; float: left;">
                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                 </div>
@@ -97,6 +97,19 @@
         </div>
     </div>
 
+     <div id="meu_plano" style="display: none">  
+            
+            <div class="titulo-header">MEU PLANO</div> 
+            
+            
+              <input type="text" id="txtcpf" name="" placeholder="SEU CPF">  
+              <input type="button" id="btn_busca_cpf" value="BUSCAR" name=""> 
+                         
+              <div id="lista_dados">
+                    
+              </div>
+
+     </div>
 
      <div id="rede_credenciada" style="display: none">  
             
@@ -170,6 +183,29 @@
 
  
         $(function () {
+
+
+            $('#txtcpf').val(window.localStorage.getItem("cpf"));
+
+
+            if(window.localStorage.getItem("cpf") != '')
+            {
+                    $.ajax({
+                       data:"CPF="+window.localStorage.getItem("cpf"),
+                       type: "POST",
+                       url: "http://odontomix.com.br/app/aberto_pagamento.php",
+                       success: function(data)
+                       {
+                            if(data == 1)
+                            {
+                                $('#alert').fadeIn();
+                            }else
+                            {
+                                 $('#alert').fadeOut();
+                            }
+                       } 
+                     });
+            }
 
             // SETA VOLTAR
             $('.titulo-header i').live('click',function(e)
@@ -303,6 +339,37 @@
         });
 
 
+
+
+            // PÁGINA MEU PLANO
+            $('.meu_plano').live('click',function(e)
+            {
+                    var hideDeffered = $('#home, #rede_credenciada').hide();
+                    hideDeffered.promise().done(function() {
+                        $('.titulo-header').html('<i rel="home" class="fa fa-arrow-left" aria-hidden="true"></i>'+"<div style=''>MEU PLANO</div>");
+                        $('#meu_plano').show();
+                    });
+  
+           
+           });
+
+           $('#btn_busca_cpf').live('click',function(e)
+            {   
+                cpf = $('#txtcpf').val();
+                window.localStorage.setItem("cpf", cpf);
+                if(cpf.length >= 10)
+                {
+                    $.ajax({
+                       data:"CPF="+$('#txtcpf').val(),
+                       type: "POST",
+                       url: "http://odontomix.com.br/app/busca_cpf.php",
+                       success: function(data)
+                       {
+                            $('#lista_dados').empty().append(data);   
+                       } 
+                     });
+                }
+           });
 
 
         });

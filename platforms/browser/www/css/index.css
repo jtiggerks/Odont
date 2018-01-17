@@ -661,3 +661,29 @@ i.fa.fa-arrow-left
     margin: 1%;
     margin-top: 20px;
 }
+
+#meu_plano  input[type=text]
+{
+    height: 40px;
+    width: 90%;
+    margin: 1%;
+    margin-top: 20px;
+}
+
+#meu_plano  input[type=BUTTON]
+{
+    height: 40px;
+    background-color: #53b0e2;
+    color: #fff;
+    border: 0;
+
+}
+
+
+#lista_dados
+{
+    width: 98%;
+    margin: 1%;
+    line-height: 35px;
+    font-size: 20px;
+}
