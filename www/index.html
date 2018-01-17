@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+    <link href="css/jquery-ui.css" rel="stylesheet" type="text/css">
+    <link href="css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+ 
+
+    <title>Odonto Mix</title>
+</head>
+
+<body>
+<input type="hidden" id="pagina-atual" name="home">
+<input type="hidden" id="categoria-atual" name="categoria">
+<input type="hidden" id="categoria-atual2" name="categoria">
+
+ <div class="header">
+     <div class="menu-controls">
+        <a href="#" class="open-menu"><i class="fa fa-navicon"></i></a>
+    </div>
+    <h2>
+        <img src="img/logo.png" width="100">
+    </h2> 
+ </div>
+
+ <div class="all-elements">
+
+     <div class="snap-drawers">
+            <div class="snap-drawer snap-drawer-left">  
+                <ul class="sidebar-navigation" id="id_menu"> 
+
+                </ul>   
+            </div>  
+
+            <div class="snap-drawer snap-drawer-right">        
+                
+            
+                
+                <div id="resultado">
+                ss
+                </div>
+
+            </div>
+    </div>
+
+    <div id="content" class="snap-content bg-guiamedico">
+
+            <div id="alert" style="width: 100%; text-align: center; bottom: 0;">                
+                <div style="width: 20%; float: left;">
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                </div>
+                <p style="width: 60%; float: left;">VOCÊ TEM PENDÊNCIAS.<br>ENTRE EM CONTATO.</p>
+                <div style="width: 20%; float: left;"></div>
+            </div>
+
+    <div id="home">        
+        <div id="centro_app_home">
+                   
+        </div>
+        <div style="clear: both; width: 100%;"></div>
+        <ul id="autocomplete" class="lista_resultado" data-role="listview" data-inset="true" data-filter="true"data-filter-theme="d"></ul>
+
+        
+        <div id="box_menu_centro">
+            <a class="rede_credenciada">
+                <i class="fa fa-object-ungroup" aria-hidden="true"></i>
+                REDE CREDENCIADA
+            </a>
+            <a class="meu_plano">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                MEU PLANO
+            </a>
+            <a class="fale_conosco">
+                <i class="fa fa-envelope-o" aria-hidden="true"></i>
+               FALE CONOSCO
+            </a>            
+
+        </div>
+    </div>
+
+
+     <div id="rede_credenciada" style="display: none">  
+            
+            <div class="titulo-header">REDE CREDENCIADA</div> 
+            
+            <form>
+                 <select id="uf_credenciados"></select>
+                 <select id="cidades_credenciados" style="display: none;"></select>
+                 <select id="bairros_credenciados" style="display: none;"></select>
+                <!--<button type="submit" class="btn btn-busca">
+                    <i class="fa fa-search" aria-hidden="true"></i>  
+                </button> 
+                -->
+            </form>             
+            <ul id="lista_dentista"  class="lista_resultado" data-role="listview" ></ul>
+
+     </div>
+
+
+ </div>
+    <script type="text/javascript" src="js/jquery.js"></script> 
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/Snap.js"></script> 
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/custom.js"></script>
+    <script type="text/javascript"> 
+ 
+
+ 
+      
+    $(document).on('backbutton',
+         function(e){
+             e.preventDefault();
+
+            $("<div title='Odonto Mix'></div>").dialog({
+               open: function(event, ui) { 
+                    $(this).html('<span style="text-align:"center;">Deseja fechar o aplicativo?.</span>'); 
+                    $(".ui-dialog-titlebar-close", ui.dialog | ui).hide(); 
+                },
+                show: { effect: "fade", duration: 300 },
+                buttons: [
+                {
+                text: "Sim",
+                  click: function() {
+                    $( this ).dialog("close");
+                    navigator.app.exitApp(); 
+                  }
+                },
+                {
+                     
+                  text: "Não",
+                  click: function() {
+                    $( this ).dialog("close");
+                    location.href="index.html";
+                    
+                  }
+              }
+              ]
+            }); 
+ 
+        });
+
+
+        app.initialize();
+
+    </script>
+
+    <script>
+
+
+ 
+        $(function () {
+
+            // SETA VOLTAR
+            $('.titulo-header i').live('click',function(e)
+            { 
+                    var hideDeffered = $('#home, #rede_credenciada').hide();
+                    hideDeffered.promise().done(function() {});
+                    $('.titulo-header').html('<i rel="home" class="fa fa-arrow-left" aria-hidden="true"></i>'+"<div style=''>"+$('#categoria-atual').val()+"</div>");
+                    $('#'+$(this).attr('rel')).show();
+            });
+
+            // PÁGINA REDE CREDENCIADA
+            $('.rede_credenciada').live('click',function(e)
+            {
+                    var hideDeffered = $('#home').hide();
+                    hideDeffered.promise().done(function() {
+                        $('.titulo-header').html('<i rel="home" class="fa fa-arrow-left" aria-hidden="true"></i>'+"<div style=''>REDE CREDENCIADA</div>");
+                        $('#rede_credenciada').show();
+                    });
+ 
+                    var  conteudohtml_centro = "";
+                  
+
+                    $.ajax({
+                        url: "http://odontomix.com.br/app/uf_credenciados.php",
+                        dataType: "json",
+                        crossDomain: true
+                    })
+                    .then( function ( response ) {
+                                $('#uf_credenciados').append($('<option>', {
+                                    value: '',
+                                    text: 'SELECIONE UM ESTADO'
+                                }));                        
+                        $.each( response, function ( i, val ) {
+                            if(val != '')
+                            {  
+                                $('#uf_credenciados').append($('<option>', {
+                                    value: val.estado,
+                                    text: val.estado
+                                }));
+                            }                            
+                        }); 
+                    });
+
+
+        });
+
+        // BUSCA CIDADE        
+        $('#uf_credenciados').live('change',function(e)
+        {
+               
+              $('#cidades_credenciados').fadeIn();
+              $('#cidades_credenciados').empty();
+              $('#bairros_credenciados').empty();
+              $.ajax({
+                        url: "http://odontomix.com.br/app/cidades_credenciados.php",
+                        dataType: "json",
+                        data: {
+                            q: this.value
+                        },
+                        crossDomain: true
+                    })
+                    .then( function ( response ) {
+                            $('#cidades_credenciados').append($('<option>', {
+                                    value: '',
+                                    text: 'SELECIONE UMA CIDADE'
+                                })); 
+
+                        $.each( response, function ( i, val ) {
+                            if(val != '')
+                            {  
+                                $('#cidades_credenciados').append($('<option>', {
+                                    value: val.cidade,
+                                    text: val.cidade
+                                }));
+                            }                            
+                        }); 
+                    });
+        });
+
+        // BUSCA BAIRRO        
+        $('#cidades_credenciados').live('change',function(e)
+        {
+               
+              $('#bairros_credenciados').fadeIn();
+              $('#bairros_credenciados').empty();
+              $.ajax({
+                        url: "http://odontomix.com.br/app/bairros_credenciados.php",
+                        dataType: "json",
+                        data: {
+                            q: this.value
+                        },
+                        crossDomain: true
+                    })
+                    .then( function ( response ) {
+                            $('#bairros_credenciados').append($('<option>', {
+                                    value: '',
+                                    text: 'SELECIONE UM BAIRRO'
+                                }));                        
+                        $.each( response, function ( i, val ) {
+                            if(val != '')
+                            {  
+                                $('#bairros_credenciados').append($('<option>', {
+                                    value: val.bairro,
+                                    text: val.bairro
+                                }));
+                            }                            
+                        }); 
+                    });
+        });
+
+
+        // LISTA DENTISTA        
+        $('#bairros_credenciados').live('change',function(e)
+        {                   
+            $('#lista_dentista').append('CARREGANDO ...');
+            var estado,cidade,bairro;
+            estado = $('#uf_credenciados').val();
+            cidade = $('#cidades_credenciados').val();
+             
+            bairro = this.value;
+        
+            $.ajax({
+               data:"estado="+estado+"&cidade="+cidade+"&bairro="+bairro,
+               type: "POST",
+               url: "http://odontomix.com.br/app/busca_dentista.php",
+               success: function(data)
+               {
+                    $('#lista_dentista').empty().append(data);   
+               } 
+             });
+        });
+
+
+
+
+        });
+
+ 
+    </script>
+
+
+</body>
+
+</html>
