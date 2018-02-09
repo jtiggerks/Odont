@@ -183,7 +183,7 @@ body {
 
 /*Page Header*/
 #content{
-    padding-top:50px;
+    padding-top:58px;
 }
 
 .header-clear{
@@ -652,7 +652,15 @@ i.fa.fa-arrow-left
   display: inline-block;  
 }
  
-
+#loaddiv
+{
+    display: none;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    background-color: #ffffffd9;
+    height: 100vh;
+}
 
 #rede_credenciada select
 {
@@ -665,9 +673,7 @@ i.fa.fa-arrow-left
 #meu_plano  input[type=text]
 {
     height: 40px;
-    width: 90%;
-    margin: 1%;
-    margin-top: 20px;
+    width: 98%;
 }
 
 #meu_plano  input[type=BUTTON]

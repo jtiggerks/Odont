@@ -38,7 +38,7 @@
         <a href="#" class="open-menu"><i class="fa fa-navicon"></i></a>
     </div>
     <h2>
-        <img src="img/logo.png" width="100">
+        <a href="index.html"><img src="img/logo.png" width="100"></a>
     </h2> 
  </div>
 
@@ -99,11 +99,23 @@
 
      <div id="meu_plano" style="display: none">  
             
+
+    <div id="loaddiv">
+        <img src="img/3.gif"><br>
+        CARREGANDO PERFIL ...<br><br>
+    </div>
+
             <div class="titulo-header">MEU PLANO</div> 
             
             
-              <input type="text" id="txtcpf" name="" placeholder="SEU CPF">  
-              <input type="button" id="btn_busca_cpf" value="BUSCAR" name=""> 
+              <table style="margin-top: 40px;">
+                <tr>
+                    <td width="88%">  <input type="text" id="txtcpf" name="" placeholder="SEU CPF"> </td>
+                    <td width="12%">  <input type="button" id="btn_busca_cpf" value="BUSCAR" name=""> </td>
+                </tr>
+              </table>
+             
+             
                          
               <div id="lista_dados">
                     
@@ -356,6 +368,7 @@
            $('#btn_busca_cpf').live('click',function(e)
             {   
                 cpf = $('#txtcpf').val();
+                $('#loaddiv').fadeIn();
                 window.localStorage.setItem("cpf", cpf);
                 if(cpf.length >= 10)
                 {
@@ -364,7 +377,8 @@
                        type: "POST",
                        url: "http://odontomix.com.br/app/busca_cpf.php",
                        success: function(data)
-                       {
+                       {    
+                            $('#loaddiv').hide();
                             $('#lista_dados').empty().append(data);   
                        } 
                      });
