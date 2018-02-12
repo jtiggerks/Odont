@@ -47,7 +47,10 @@
      <div class="snap-drawers">
             <div class="snap-drawer snap-drawer-left">  
                 <ul class="sidebar-navigation" id="id_menu"> 
-
+                    <li><a class="rede_credenciada" href="#"><i class="fa fa-object-ungroup" aria-hidden="true"></i>REDE CREDENCIADA</a></li>
+                    <li><a class="meu_plano" href="#"><i class="fa fa-user" aria-hidden="true"></i>MEU PLANO</a></li>
+                    <li><a class="fale_conosco" href="#"><i class="fa fa-envelope-o" aria-hidden="true"></i>FALE CONOSCO</a></li>
+                    <li><a class="sair_btn" href="#"><i class="fa fa-mail-reply" aria-hidden="true"></i>SAIR</a></li>
                 </ul>   
             </div>  
 
@@ -56,7 +59,7 @@
             
                 
                 <div id="resultado">
-                ss
+                
                 </div>
 
             </div>
@@ -95,6 +98,73 @@
             </a>            
 
         </div>
+    </div>
+    
+    <style>
+    #fale_conosco form label
+    {
+        text-align: left;
+        display: inline-block;
+        width: 20%;
+    }
+
+    #fale_conosco form input[type=text]
+    {
+        height: 40px;
+        width: 100%;
+    }
+
+ 
+    .group_form  
+    {   
+        clear: both;
+        margin-bottom: 18px;
+        color: #333;
+    }
+    
+
+    .group_form textarea
+    {
+    width: 100%;
+    height: 90px;
+    }
+
+
+    </style>
+
+    <div id="fale_conosco" style="display: none">  
+         <div class="titulo-header">FALE CONOSCO</div>
+
+         <div style="padding: 18px; line-height: 30px; text-align: center;">
+         E-mail: sac@odontosaolucas.com.br<br>
+         Tel: (14)3523-4244 - 0800-031-0304<br><br>
+           <form action="http://odontomix.com.br/app/enviar.php" method="POST">
+                 
+                <div class="group_form">
+                     <label style="">Nome:</label>
+                     <input type="text" name="in_Nome" required />
+                </div> 
+
+                <div class="group_form">
+                     <label style="">Telefone:</label>
+                     <input type="text" name="in_Telefone" required />
+                </div>            
+
+                <div class="group_form">
+                     <label style="">Assunto:</label>
+                     <input type="text" name="in_Assunto" required />
+                </div>            
+                <div class="group_form">
+                     <label style="">Mensagem:</label>
+                     <textarea required name="in_Mensagem"></textarea>
+                </div>       
+
+                <input type="submit" name="">
+
+            </form>  
+
+        </div>    
+
     </div>
 
      <div id="meu_plano" style="display: none">  
@@ -222,148 +292,159 @@
             // SETA VOLTAR
             $('.titulo-header i').live('click',function(e)
             { 
-                    var hideDeffered = $('#home, #rede_credenciada').hide();
+                    var hideDeffered = $('#home, #rede_credenciada, #meu_plano, #fale_conosco').hide();
                     hideDeffered.promise().done(function() {});
                     $('.titulo-header').html('<i rel="home" class="fa fa-arrow-left" aria-hidden="true"></i>'+"<div style=''>"+$('#categoria-atual').val()+"</div>");
                     $('#'+$(this).attr('rel')).show();
             });
 
-            // PÁGINA REDE CREDENCIADA
-            $('.rede_credenciada').live('click',function(e)
+            $('.sair_btn').live('click',function(e)
+            { 
+                navigator.app.exitApp(); 
+
+            });       
+
+                // PÁGINA REDE CREDENCIADA
+                $('.rede_credenciada').live('click',function(e)
+                {
+                        var hideDeffered = $('#home,#meu_plano,#fale_conosco').hide();
+                        hideDeffered.promise().done(function() {
+                            $('.titulo-header').html('<i rel="home" class="fa fa-arrow-left" aria-hidden="true"></i>'+"<div style=''>REDE CREDENCIADA</div>");
+                            $('#rede_credenciada').show();
+                        });
+     
+                        var  conteudohtml_centro = "";
+                      
+
+                        $.ajax({
+                            url: "http://odontomix.com.br/app/uf_credenciados.php",
+                            dataType: "json",
+                            crossDomain: true
+                        })
+                        .then( function ( response ) {
+                                    $('#uf_credenciados').append($('<option>', {
+                                        value: '',
+                                        text: 'SELECIONE UM ESTADO'
+                                    }));                        
+                            $.each( response, function ( i, val ) {
+                                if(val != '')
+                                {  
+                                    $('#uf_credenciados').append($('<option>', {
+                                        value: val.estado,
+                                        text: val.estado
+                                    }));
+                                }                            
+                            }); 
+                        });
+            });
+
+            // BUSCA CIDADE        
+            $('#uf_credenciados').live('change',function(e)
             {
-                    var hideDeffered = $('#home').hide();
-                    hideDeffered.promise().done(function() {
-                        $('.titulo-header').html('<i rel="home" class="fa fa-arrow-left" aria-hidden="true"></i>'+"<div style=''>REDE CREDENCIADA</div>");
-                        $('#rede_credenciada').show();
-                    });
- 
-                    var  conteudohtml_centro = "";
-                  
-
-                    $.ajax({
-                        url: "http://odontomix.com.br/app/uf_credenciados.php",
-                        dataType: "json",
-                        crossDomain: true
-                    })
-                    .then( function ( response ) {
-                                $('#uf_credenciados').append($('<option>', {
-                                    value: '',
-                                    text: 'SELECIONE UM ESTADO'
-                                }));                        
-                        $.each( response, function ( i, val ) {
-                            if(val != '')
-                            {  
-                                $('#uf_credenciados').append($('<option>', {
-                                    value: val.estado,
-                                    text: val.estado
-                                }));
-                            }                            
-                        }); 
-                    });
-
-
-        });
-
-        // BUSCA CIDADE        
-        $('#uf_credenciados').live('change',function(e)
-        {
-               
-              $('#cidades_credenciados').fadeIn();
-              $('#cidades_credenciados').empty();
-              $('#bairros_credenciados').empty();
-              $.ajax({
-                        url: "http://odontomix.com.br/app/cidades_credenciados.php",
-                        dataType: "json",
-                        data: {
-                            q: this.value
-                        },
-                        crossDomain: true
-                    })
-                    .then( function ( response ) {
-                            $('#cidades_credenciados').append($('<option>', {
-                                    value: '',
-                                    text: 'SELECIONE UMA CIDADE'
-                                })); 
-
-                        $.each( response, function ( i, val ) {
-                            if(val != '')
-                            {  
+                   
+                  $('#cidades_credenciados').fadeIn();
+                  $('#cidades_credenciados').empty();
+                  $('#bairros_credenciados').empty();
+                  $.ajax({
+                            url: "http://odontomix.com.br/app/cidades_credenciados.php",
+                            dataType: "json",
+                            data: {
+                                q: this.value
+                            },
+                            crossDomain: true
+                        })
+                        .then( function ( response ) {
                                 $('#cidades_credenciados').append($('<option>', {
-                                    value: val.cidade,
-                                    text: val.cidade
-                                }));
-                            }                            
-                        }); 
-                    });
-        });
+                                        value: '',
+                                        text: 'SELECIONE UMA CIDADE'
+                                    })); 
 
-        // BUSCA BAIRRO        
-        $('#cidades_credenciados').live('change',function(e)
-        {
-               
-              $('#bairros_credenciados').fadeIn();
-              $('#bairros_credenciados').empty();
-              $.ajax({
-                        url: "http://odontomix.com.br/app/bairros_credenciados.php",
-                        dataType: "json",
-                        data: {
-                            q: this.value
-                        },
-                        crossDomain: true
-                    })
-                    .then( function ( response ) {
-                            $('#bairros_credenciados').append($('<option>', {
-                                    value: '',
-                                    text: 'SELECIONE UM BAIRRO'
-                                }));                        
-                        $.each( response, function ( i, val ) {
-                            if(val != '')
-                            {  
-                                $('#bairros_credenciados').append($('<option>', {
-                                    value: val.bairro,
-                                    text: val.bairro
-                                }));
-                            }                            
-                        }); 
-                    });
-        });
+                            $.each( response, function ( i, val ) {
+                                if(val != '')
+                                {  
+                                    $('#cidades_credenciados').append($('<option>', {
+                                        value: val.cidade,
+                                        text: val.cidade
+                                    }));
+                                }                            
+                            }); 
+                        });
+            });
 
-
-        // LISTA DENTISTA        
-        $('#bairros_credenciados').live('change',function(e)
-        {                   
-            $('#lista_dentista').append('CARREGANDO ...');
-            var estado,cidade,bairro;
-            estado = $('#uf_credenciados').val();
-            cidade = $('#cidades_credenciados').val();
-             
-            bairro = this.value;
-        
-            $.ajax({
-               data:"estado="+estado+"&cidade="+cidade+"&bairro="+bairro,
-               type: "POST",
-               url: "http://odontomix.com.br/app/busca_dentista.php",
-               success: function(data)
-               {
-                    $('#lista_dentista').empty().append(data);   
-               } 
-             });
-        });
-
-
-
-
-            // PÁGINA MEU PLANO
-            $('.meu_plano').live('click',function(e)
+            // BUSCA BAIRRO        
+            $('#cidades_credenciados').live('change',function(e)
             {
-                    var hideDeffered = $('#home, #rede_credenciada').hide();
+                   
+                  $('#bairros_credenciados').fadeIn();
+                  $('#bairros_credenciados').empty();
+                  $.ajax({
+                            url: "http://odontomix.com.br/app/bairros_credenciados.php",
+                            dataType: "json",
+                            data: {
+                                q: this.value
+                            },
+                            crossDomain: true
+                        })
+                        .then( function ( response ) {
+                                $('#bairros_credenciados').append($('<option>', {
+                                        value: '',
+                                        text: 'SELECIONE UM BAIRRO'
+                                    }));                        
+                            $.each( response, function ( i, val ) {
+                                if(val != '')
+                                {  
+                                    $('#bairros_credenciados').append($('<option>', {
+                                        value: val.bairro,
+                                        text: val.bairro
+                                    }));
+                                }                            
+                            }); 
+                        });
+            });
+
+            // LISTA DENTISTA        
+            $('#bairros_credenciados').live('change',function(e)
+            {                   
+                $('#lista_dentista').append('CARREGANDO ...');
+                var estado,cidade,bairro;
+                estado = $('#uf_credenciados').val();
+                cidade = $('#cidades_credenciados').val();
+                 
+                bairro = this.value;
+            
+                $.ajax({
+                   data:"estado="+estado+"&cidade="+cidade+"&bairro="+bairro,
+                   type: "POST",
+                   url: "http://odontomix.com.br/app/busca_dentista.php",
+                   success: function(data)
+                   {
+                        $('#lista_dentista').empty().append(data);   
+                   } 
+                 });
+            });
+
+            // PÁGINA FALE CONOSCO
+            $('.fale_conosco').live('click',function(e)
+            {
+                    var hideDeffered = $('#home, #meu_plano, #rede_credenciada').hide();
                     hideDeffered.promise().done(function() {
-                        $('.titulo-header').html('<i rel="home" class="fa fa-arrow-left" aria-hidden="true"></i>'+"<div style=''>MEU PLANO</div>");
-                        $('#meu_plano').show();
+                        $('.titulo-header').html('<i rel="home" class="fa fa-arrow-left" aria-hidden="true"></i>'+"<div style=''>FALE CONOSCO</div>");
+                        $('#fale_conosco').show();
                     });
   
            
            });
+
+            // PÁGINA MEU PLANO
+            $('.meu_plano').live('click',function(e)
+            {
+                    var hideDeffered = $('#home, #rede_credenciada,#fale_conosco').hide();
+                    hideDeffered.promise().done(function() {
+                        $('.titulo-header').html('<i rel="home" class="fa fa-arrow-left" aria-hidden="true"></i>'+"<div style=''>MEU PLANO</div>");
+                        $('#meu_plano').show();
+                    });          
+           });
+
 
            $('#btn_busca_cpf').live('click',function(e)
             {   
@@ -384,6 +465,7 @@
                      });
                 }
            });
+
 
 
         });
