@@ -48,6 +48,7 @@
             <div class="snap-drawer snap-drawer-left">  
                 <ul class="sidebar-navigation" id="id_menu"> 
                     <li><a class="rede_credenciada" href="#"><i class="fa fa-object-ungroup" aria-hidden="true"></i>REDE CREDENCIADA</a></li>
+                    <li><a class="urgente_emergencia"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>URGENCIA E EMERGENCIA</a></li>
                     <li><a class="meu_plano" href="#"><i class="fa fa-user" aria-hidden="true"></i>MEU PLANO</a></li>
                     <li><a class="fale_conosco" href="#"><i class="fa fa-envelope-o" aria-hidden="true"></i>FALE CONOSCO</a></li>
                     <li><a class="sair_btn" href="#"><i class="fa fa-mail-reply" aria-hidden="true"></i>SAIR</a></li>
@@ -88,6 +89,11 @@
                 <i class="fa fa-object-ungroup" aria-hidden="true"></i>
                 REDE CREDENCIADA
             </a>
+            <a class="urgente_emergencia">
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                URGENCIA E EMERGENCIA
+            </a>
+
             <a class="meu_plano">
                 <i class="fa fa-user" aria-hidden="true"></i>
                 MEU PLANO
@@ -200,7 +206,7 @@
      <div id="rede_credenciada" style="display: none">  
             
             <div class="titulo-header">REDE CREDENCIADA</div> 
-            
+            <input type="hidden" id="sos" value="0" name="">
             <form>
                  <select id="uf_credenciados"></select>
                  <select id="cidades_credenciados" style="display: none;"></select>
@@ -306,11 +312,59 @@
             { 
                 navigator.app.exitApp(); 
 
-            });       
+            });      
+
+                // PÁGINA REDE CREDENCIADA
+                $('.urgente_emergencia').live('click',function(e)
+                {      
+                         $('#lista_dentista').empty();
+                         $('#uf_credenciados').empty();
+                         $('#cidades_credenciados').hide().empty();
+                         $('#bairros_credenciados').hide().empty();
+
+
+                        $('#sos').val(1);
+                        var hideDeffered = $('#home,#meu_plano,#fale_conosco').hide();
+                        hideDeffered.promise().done(function() {
+                            $('.titulo-header').html('<i rel="home" class="fa fa-arrow-left" aria-hidden="true"></i>'+"<div style=''>URGENCIA E EMERGENCIA</div>");
+                            $('#rede_credenciada').show();
+                        });
+     
+                        var  conteudohtml_centro = "";
+                      
+
+                        $.ajax({
+                            url: "http://odontomix.com.br/app/uf_credenciados.php",
+                            dataType: "json",
+                            crossDomain: true
+                        })
+                        .then( function ( response ) {
+                                    $('#uf_credenciados').append($('<option>', {
+                                        value: '',
+                                        text: 'SELECIONE UM ESTADO'
+                                    }));                        
+                            $.each( response, function ( i, val ) {
+                                if(val != '')
+                                {  
+                                    $('#uf_credenciados').append($('<option>', {
+                                        value: val.estado,
+                                        text: val.estado
+                                    }));
+                                }                            
+                            }); 
+                        });
+            });
+
 
                 // PÁGINA REDE CREDENCIADA
                 $('.rede_credenciada').live('click',function(e)
-                {
+                {   
+                         $('#lista_dentista').empty();
+                         $('#uf_credenciados').empty();
+                         $('#cidades_credenciados').hide().empty();
+                         $('#bairros_credenciados').hide().empty();
+
+                        $('#sos').val(0);
                         var hideDeffered = $('#home,#meu_plano,#fale_conosco').hide();
                         hideDeffered.promise().done(function() {
                             $('.titulo-header').html('<i rel="home" class="fa fa-arrow-left" aria-hidden="true"></i>'+"<div style=''>REDE CREDENCIADA</div>");
@@ -404,20 +458,38 @@
                                 }                            
                             }); 
                         });
+
+
+                        if($('#sos').val() == 1)
+                        {
+                            var estado = $('#uf_credenciados').val();
+                            $.ajax({
+                               data:"sos=1&estado="+estado+"&cidade="+this.value,
+                               type: "POST",
+                               url: "http://odontomix.com.br/app/busca_dentista.php",
+                               success: function(data)
+                               {
+                                    $('#lista_dentista').empty().append(data);   
+                               } 
+                             });
+                        }
+
+
             });
 
             // LISTA DENTISTA        
             $('#bairros_credenciados').live('change',function(e)
             {                   
                 $('#lista_dentista').append('CARREGANDO ...');
-                var estado,cidade,bairro;
+                var estado,cidade,bairro,sos;
                 estado = $('#uf_credenciados').val();
                 cidade = $('#cidades_credenciados').val();
+                sos = $('#sos').val();
                  
                 bairro = this.value;
             
                 $.ajax({
-                   data:"estado="+estado+"&cidade="+cidade+"&bairro="+bairro,
+                   data:"sos="+sos+"&estado="+estado+"&cidade="+cidade+"&bairro="+bairro,
                    type: "POST",
                    url: "http://odontomix.com.br/app/busca_dentista.php",
                    success: function(data)
