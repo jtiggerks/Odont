@@ -60,12 +60,12 @@
  
     <access origin="*" />
     <access origin="*" />
-    <access origin="http://www.odontomix.com.br/" />
+    <access origin="https://www.odontomix.com.br/" />
     <access origin="www.odontomix.com.br" />
 
-    <allow-intent href="http://*/*" />
-    <allow-intent href="http://www.odontomix.com.br" />
-    <allow-navigation href="http://www.odontomix.com.br/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="https://www.odontomix.com.br" />
+    <allow-navigation href="https://www.odontomix.com.br/*" />
 
         
     <allow-intent href="http://*/*" />
