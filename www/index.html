@@ -145,7 +145,7 @@
          <div style="padding: 18px; line-height: 30px; text-align: center;">
          E-mail: sac@odontomix.com.br<br>
          Tel: (14)3523-4244 - 0800-031-0304<br><br>
-           <form action="http://odontomix.com.br/app/enviar.php" method="POST">
+           <form action="https://odontomix.com.br/app/enviar.php" method="POST">
                  
                 <div class="group_form">
                      <label style="">Nome:</label>
@@ -286,7 +286,7 @@
                     $.ajax({
                        data:"CPF="+window.localStorage.getItem("cpf"),
                        type: "POST",
-                       url: "http://odontomix.com.br/app/aberto_pagamento.php",
+                       url: "https://odontomix.com.br/app/aberto_pagamento.php",
                        success: function(data)
                        {
                             if(data == 1)
@@ -335,7 +335,7 @@
                       
 
                         $.ajax({
-                            url: "http://odontomix.com.br/app/uf_credenciados.php",
+                            url: "https://odontomix.com.br/app/uf_credenciados.php",
                             dataType: "json",
                             crossDomain: true
                         })
@@ -376,7 +376,7 @@
                       
 
                         $.ajax({
-                            url: "http://odontomix.com.br/app/uf_credenciados.php",
+                            url: "https://odontomix.com.br/app/uf_credenciados.php",
                             dataType: "json",
                             crossDomain: true
                         })
@@ -405,7 +405,7 @@
                   $('#cidades_credenciados').empty();
                   $('#bairros_credenciados').empty();
                   $.ajax({
-                            url: "http://odontomix.com.br/app/cidades_credenciados.php",
+                            url: "https://odontomix.com.br/app/cidades_credenciados.php",
                             dataType: "json",
                             data: {
                                 q: this.value
@@ -437,7 +437,7 @@
                   $('#bairros_credenciados').fadeIn();
                   $('#bairros_credenciados').empty();
                   $.ajax({
-                            url: "http://odontomix.com.br/app/bairros_credenciados.php",
+                            url: "https://odontomix.com.br/app/bairros_credenciados.php",
                             dataType: "json",
                             data: {
                                 q: this.value
@@ -467,7 +467,7 @@
                             $.ajax({
                                data:"sos=1&estado="+estado+"&cidade="+this.value,
                                type: "POST",
-                               url: "http://odontomix.com.br/app/busca_dentista.php",
+                               url: "https://odontomix.com.br/app/busca_dentista.php",
                                success: function(data)
                                {
                                     $('#lista_dentista').empty().append(data);   
@@ -492,7 +492,7 @@
                 $.ajax({
                    data:"sos="+sos+"&estado="+estado+"&cidade="+cidade+"&bairro="+bairro,
                    type: "POST",
-                   url: "http://odontomix.com.br/app/busca_dentista.php",
+                   url: "https://odontomix.com.br/app/busca_dentista.php",
                    success: function(data)
                    {
                         $('#lista_dentista').empty().append(data);   
@@ -533,7 +533,7 @@
                     $.ajax({
                        data:"CPF="+$('#txtcpf').val(),
                        type: "POST",
-                       url: "http://odontomix.com.br/app/busca_cpf.php",
+                       url: "https://odontomix.com.br/app/busca_cpf.php",
                        success: function(data)
                        {    
                             $('#loaddiv').hide();
